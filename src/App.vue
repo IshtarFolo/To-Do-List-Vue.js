@@ -1,6 +1,6 @@
 <script setup>
 // Import Vue
-import { ref, resolveTransitionHooks } from 'vue'
+import { ref, resolveTransitionHooks, watch } from 'vue'
 // Styles
 import './assets/main.css'
 
@@ -68,6 +68,8 @@ function countTasks(event)
 function tacheFinie(index, event)
 {
   tasks.value[index].completed = event.target.checked
+
+  saveTasks();
 }
 
 // On récupère les tâches du localStorage
@@ -107,6 +109,13 @@ function rmTask(index)
   countTasks()
 }
 
+// !!!!!!!!!!!!!!! TESTS Formation !!!!!!!!!!!!!!!
+//-------------------------------------------------------------------------------------------------------------
+watch(tasks, (newTasks, oldTasks) => {
+  console.log('Tâches mises à jour :', newTasks);
+  console.log('Anciennes tâches :', oldTasks);
+}, { deep: true }); // Utilisez { deep: true } pour surveiller les changements dans les objets imbriqués
+
 </script>
 
 <!-- **************** App **************** -->
@@ -119,7 +128,8 @@ function rmTask(index)
     <div class="main">
       <div class="task-creator">
         <p>Ajouter une tâche : &nbsp;</p>
-        <input class="task-add" v-model="message" />
+        <!-- On peut appuyer sur ENTER pour ajouter une tâche également -->
+        <input class="task-add" v-model="message" @keyup.enter="addTask"/>
 
         <!-- Bouton pour ajouter la tache a la liste des taches -->
         <button class="btn-add" @click="addTask">OK</button>
@@ -134,7 +144,7 @@ function rmTask(index)
           <li v-for="(task, index) in tasks" :key="index" :class="{ fini: task.completed }">
               <div>
                 <!-- Checkbox -->
-                <input type="checkbox" class="checkbox" @change="tacheFinie(index, $event)"/>
+                <input type="checkbox" class="checkbox" @change="tacheFinie(index, $event)" :checked="task.completed"/>
                 <p>{{ task.text }}</p>
                 <!-- On supprime la tâche avec le bouton "X" -->
                 <button class="btn-suppr" @click="rmTask(index)">X</button>
@@ -150,5 +160,7 @@ function rmTask(index)
     <h2>Nombre de tâches</h2>
       <p>Nombre de tâches : {{ nbrtasks }}</p>
   </footer>
-
+  
+  <router></router>
 </template>
+
