@@ -17,9 +17,6 @@ let message = ref('')
 // On détermine le nombre de tâches avec la méthode length
 var nbrtasks = ref(0)
 
-/*=============
-** FONCTIONS **
-==============*/
 // Quand on charge la page, on vérifie si le localStorage contient des tâches
 // Si oui, on les récupère et on les affiche
 // Sinon, on initialise le tableau tasks à vide
@@ -32,6 +29,9 @@ else
   tasks.value = []
 }
 
+/*=============
+** FONCTIONS **
+==============*/
 // On ajoute une tâche à la liste en cliquant sur le bouton "OK"
 function addTask(event)
 {
@@ -142,7 +142,7 @@ watch(tasks, (newTasks, oldTasks) => {
         <ol>
           <!-- On récupère les tâches crées dans le localstorage -->
           <li v-for="(task, index) in tasks" :key="index" :class="{ fini: task.completed }">
-              <div>
+              <div class="task-unit">
                 <!-- Checkbox -->
                 <input type="checkbox" class="checkbox" @change="tacheFinie(index, $event)" :checked="task.completed"/>
                 <p>{{ task.text }}</p>
